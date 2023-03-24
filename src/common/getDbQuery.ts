@@ -4,7 +4,7 @@ export function getDbQuery(searchText: string): string {
                 FROM cities
                 WHERE name LIKE '----';`
     } else {
-        return `SELECT id, name, lon, lat
+        return `SELECT id, name, country, lon, lat
                 FROM cities
                 WHERE name LIKE '%${searchText}%'
                 ORDER BY population DESC;`
