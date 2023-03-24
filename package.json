@@ -11,7 +11,7 @@
     "license": "MIT",
     "commands": [
         {
-            "name": "show-sun-moon-times",
+            "name": "index",
             "title": "Show Sun/Moon Times",
             "description": "Show Sun/Moon times",
             "mode": "view"

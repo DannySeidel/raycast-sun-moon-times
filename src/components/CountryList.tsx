@@ -1,9 +1,10 @@
-import { List } from "@raycast/api"
-import { useSQL } from "@raycast/utils"
 import { useState } from "react"
-import { CITIES_DB } from "../config/dbPath"
-import { getDbQuery } from "./common/getDbQuery"
-import { countryList } from "../assets/countryList"
+import { useSQL } from "@raycast/utils"
+import { CITIES_DB } from "../../config/dbPath"
+import { getDbQuery } from "../common/getDbQuery"
+import { List } from "@raycast/api"
+import { countryList } from "../../assets/countryList"
+import { resolveCoords } from "../common/resolveCoords"
 
 interface cityItem {
     id: number
@@ -13,7 +14,7 @@ interface cityItem {
     lat: number
 }
 
-export default function Command() {
+export const CountryList = () => {
     const [searchText, setSearchText] = useState<string>("")
     const { permissionView, data, isLoading } = useSQL<cityItem>(CITIES_DB, getDbQuery(searchText))
 
@@ -26,8 +27,9 @@ export default function Command() {
             {data?.map((city) => (
                 <List.Item
                     key={city.id}
-                    title={`${countryList[city.country]["emoji"]} ${city.name}`}
-                    subtitle={`Lon: ${city.lon.toFixed(2)}, Lat: ${city.lat.toFixed(2)}`}
+                    title={`${countryList[city.country].emoji}  ${city.name}`}
+                    subtitle={resolveCoords(city.lat, city.lon)}
+                    accessories={[{ text: countryList[city.country]["name"] }]}
                 />
             ))}
         </List>
