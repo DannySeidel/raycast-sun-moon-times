@@ -3,10 +3,23 @@
     "name": "sun-moon-times",
     "title": "Sun/Moon Times",
     "description": "Show info for sun and moon for any city in the World.",
-    "icon": "command-icon.png",
+    "icon": "extension_icon@512px.png",
     "author": "danny_seidel",
     "categories": [
         "Data"
+    ],
+    "keywords": [
+        "sun",
+        "sunrise",
+        "sunset",
+        "moon",
+        "moonrise",
+        "moonset",
+        "dawn",
+        "dusk",
+        "time",
+        "world",
+        "astronomy"
     ],
     "license": "MIT",
     "commands": [
