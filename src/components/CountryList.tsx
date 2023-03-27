@@ -1,13 +1,13 @@
-import { useState } from "react"
-import { useSQL } from "@raycast/utils"
-import { CITIES_DB } from "../../config/dbPath"
-import { getDbQuery } from "../common/getDbQuery"
 import { List } from "@raycast/api"
-import { countryList } from "../../assets/countryList"
-import { resolveCoords } from "../common/resolveCoords"
-import { getDayDuration } from "../common/getDayDuration"
+import { useSQL } from "@raycast/utils"
+import { useState } from "react"
 import { getSunrise, getSunset } from "sunrise-sunset-js"
+import { countryList } from "../../assets/countryList"
+import { CITIES_DB } from "../../config/dbPath"
 import { convertDateToString } from "../common/convertDateToString"
+import { getDayDuration } from "../common/getDayDuration"
+import { getDbQuery } from "../common/getDbQuery"
+import { resolveCoords } from "../common/resolveCoords"
 
 interface cityItem {
     id: number
