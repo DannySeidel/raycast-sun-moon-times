@@ -5,8 +5,9 @@ import { getDbQuery } from "../common/getDbQuery"
 import { List } from "@raycast/api"
 import { countryList } from "../../assets/countryList"
 import { resolveCoords } from "../common/resolveCoords"
-import { getSunriseInLocalTz } from "../common/getSunriseInLocalTz"
-import { getSunsetInLocalTz } from "../common/getSunsetInLocalTz"
+import { getDayDuration } from "../common/getDayDuration"
+import { getSunrise, getSunset } from "sunrise-sunset-js"
+import { convertDateToString } from "../common/convertDateToString"
 
 interface cityItem {
     id: number
@@ -29,18 +30,26 @@ export const CountryList = () => {
         <List isLoading={isLoading} onSearchTextChange={setSearchText}>
             {data?.map((city) => {
                 const { id, name, country, timezone, lon, lat } = city
+                const sunrise = getSunrise(lat, lon)
+                const sunset = getSunset(lat, lon)
+                const dayDuration = getDayDuration(sunrise, sunset)
+
                 return (
                     <List.Item
                         key={id}
                         title={`${countryList[country].emoji}  ${name}`}
                         subtitle={resolveCoords(lat, lon)}
                         accessories={[
-                            { text: "☀️" },
+                            { icon: "sun-16" },
                             {
                                 icon: "arrow-up-16",
-                                text: getSunriseInLocalTz(lat, lon, timezone),
+                                text: convertDateToString(sunrise, timezone),
                             },
-                            { icon: "arrow-down-16", text: getSunsetInLocalTz(lat, lon, timezone) },
+                            {
+                                icon: "arrow-down-16",
+                                text: convertDateToString(sunset, timezone),
+                            },
+                            { icon: "clock-16", text: dayDuration },
                         ]}
                     />
                 )
