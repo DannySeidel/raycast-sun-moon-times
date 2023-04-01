@@ -1,5 +1,5 @@
-import { CountryList } from "./components/CountryList"
+import { CityListView } from "./components/CityListView"
 
 export default function Command() {
-    return <CountryList />
+    return <CityListView />
 }
