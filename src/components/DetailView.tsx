@@ -5,25 +5,33 @@ import { CityItem } from "../../types/CityItem"
 import { convertDateToString } from "../common/convertDateToString"
 import { resolveCoords } from "../common/resolveCoords"
 
-interface DetailViewProps extends Omit<CityItem, "id"> {
+interface DetailViewProps extends Omit<CityItem, "geoname_id"> {
     sunrise: string
     sunset: string
     dayDuration: string
 }
 
-export const DetailView = ({ name, country, timezone, lat, lon, sunrise, sunset, dayDuration }: DetailViewProps) => {
-    const moreSunInfos = sunCalc.getTimes(new Date(), lat, lon)
+export const DetailView = ({
+    name,
+    country_code,
+    timezone,
+    coordinates,
+    sunrise,
+    sunset,
+    dayDuration,
+}: DetailViewProps) => {
+    const moreSunInfos = sunCalc.getTimes(new Date(), coordinates.lat, coordinates.lon)
     const solarNoon = convertDateToString(moreSunInfos.solarNoon, timezone)
     const nadir = convertDateToString(moreSunInfos.nadir, timezone)
     const dawn = convertDateToString(moreSunInfos.dawn, timezone)
     const dusk = convertDateToString(moreSunInfos.dusk, timezone)
 
-    const moonTimes = sunCalc.getMoonTimes(new Date(), lat, lon)
+    const moonTimes = sunCalc.getMoonTimes(new Date(), coordinates.lat, coordinates.lon)
     const moonrise = convertDateToString(moonTimes.rise, timezone)
     const moonset = convertDateToString(moonTimes.set, timezone)
     const moonIllumination = sunCalc.getMoonIllumination(new Date())
 
-    const cityInfo = `# ${name}  ${countryList[country].flag}\n\n`
+    const cityInfo = `# ${name}  ${countryList[country_code].flag}\n\n`
     const headings = `### ☀️ Sun \t\t\t\t\t\t\t\t\t\t 🌖  Moon\n`
     const riseTimes = `Sunrise: ${sunrise}  \t\t\t\t\t\t\t\t Moonrise: ${moonrise}\n\n`
     const setTimes = `Sunset: ${sunset} \t\t\t\t\t\t\t\t\t Moonset: ${moonset}\n\n`
@@ -40,7 +48,10 @@ export const DetailView = ({ name, country, timezone, lat, lon, sunrise, sunset,
 
     return (
         <Detail
-            navigationTitle={`${name} ${countryList[country].flag}  |  ${resolveCoords(lat, lon)}`}
+            navigationTitle={`${name} ${countryList[country_code].flag}  |  ${resolveCoords(
+                coordinates.lat,
+                coordinates.lon
+            )}`}
             markdown={infoText}
         />
     )
