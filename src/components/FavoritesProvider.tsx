@@ -1,11 +1,12 @@
 import { LocalStorage, showToast, Toast } from "@raycast/api"
 import { createContext, ReactNode, useContext, useEffect, useState } from "react"
+import { countryList } from "../../assets/countryList"
 import { CityItem } from "../../types/CityItem"
 
 interface FavoritesContextProps {
     favorites: CityItem[]
     addToFavorites: (cityInfo: CityItem) => Promise<void>
-    removeFromFavorites: (geonameId: number) => Promise<void>
+    removeFromFavorites: (cityInfo: CityItem) => Promise<void>
 }
 
 interface FavoritesProviderProps {
@@ -38,20 +39,28 @@ export const FavoritesProvider = ({ children }: FavoritesProviderProps) => {
         if (favorites.some((favorite: CityItem) => favorite.geonameId === cityInfo.geonameId)) {
             await showToast({
                 style: Toast.Style.Failure,
-                title: `${cityInfo.name} is already in your favorites`,
+                title: `${countryList[cityInfo.countryCode].flag} ${cityInfo.name} is already in your favorites`,
             })
         } else {
             const newFavorites = [...favorites, cityInfo]
-            await LocalStorage.setItem("favorites", JSON.stringify(newFavorites))
             setFavorites(newFavorites)
+            await LocalStorage.setItem("favorites", JSON.stringify(newFavorites))
+            await showToast({
+                style: Toast.Style.Success,
+                title: `${countryList[cityInfo.countryCode].flag} ${cityInfo.name} was add to your favorites`,
+            })
         }
     }
 
-    async function removeFromFavorites(geonameId: number): Promise<void> {
-        if (favorites.some((favorite: CityItem) => favorite.geonameId === geonameId)) {
-            const newFavorites = favorites.filter((favorite: CityItem) => favorite.geonameId !== geonameId)
-            await LocalStorage.setItem("favorites", JSON.stringify(newFavorites))
+    async function removeFromFavorites(cityInfo: CityItem): Promise<void> {
+        if (favorites.some((favorite: CityItem) => favorite.geonameId === cityInfo.geonameId)) {
+            const newFavorites = favorites.filter((favorite: CityItem) => favorite.geonameId !== cityInfo.geonameId)
             setFavorites(newFavorites)
+            await LocalStorage.setItem("favorites", JSON.stringify(newFavorites))
+            await showToast({
+                style: Toast.Style.Success,
+                title: `${countryList[cityInfo.countryCode].flag} ${cityInfo.name} was removed from your favorites`,
+            })
         }
     }
 

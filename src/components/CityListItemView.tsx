@@ -73,7 +73,7 @@ export const CityListItemView = ({
                             title="Remove From Favorites"
                             style={Action.Style.Destructive}
                             icon={Icon.Trash}
-                            onAction={async () => await removeFromFavorites(geonameId)}
+                            onAction={async () => await removeFromFavorites(city)}
                         />
                     ) : (
                         <Action

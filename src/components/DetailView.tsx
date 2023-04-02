@@ -64,15 +64,9 @@ export const DetailView = ({
                     <Action
                         title="Add to Favorites"
                         icon={Icon.Star}
-                        onAction={async () =>
-                            await addToFavorites({
-                                geonameId,
-                                name,
-                                countryCode,
-                                timezone,
-                                coordinates,
-                            })
-                        }
+                        onAction={async () => {
+                            await addToFavorites({ geonameId, name, countryCode, timezone, coordinates })
+                        }}
                     />
                 </ActionPanel>
             }
