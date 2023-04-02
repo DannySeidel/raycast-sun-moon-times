@@ -8,7 +8,6 @@ export function useFavorites() {
     useEffect(() => {
         async function getFavorites() {
             const favorites = await LocalStorage.getItem("favorites")
-            console.log(favorites)
             if (favorites) {
                 setFavorites(JSON.parse(favorites.toString()))
             }

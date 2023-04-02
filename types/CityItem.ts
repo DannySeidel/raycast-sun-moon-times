@@ -1,7 +1,7 @@
 export interface CityItem {
-    geoname_id: number
+    geonameId: number
     name: string
-    country_code: string
+    countryCode: string
     timezone: string
     coordinates: { lat: number; lon: number }
 }

@@ -1,4 +1,4 @@
-import { Action, ActionPanel, Icon, List } from "@raycast/api"
+import { Action, ActionPanel, Icon, List, useNavigation } from "@raycast/api"
 import { getSunrise, getSunset } from "sunrise-sunset-js"
 import { countryList } from "../../assets/countryList"
 import { CityItem } from "../../types/CityItem"
@@ -9,7 +9,8 @@ import { resolveCoords } from "../common/resolveCoords"
 import { DetailView } from "./DetailView"
 
 export const CityListItemView = (city: CityItem) => {
-    const { geoname_id, name, country_code, timezone, coordinates } = city
+    const { push } = useNavigation()
+    const { geonameId, name, countryCode, timezone, coordinates } = city
     const sunrise = getSunrise(coordinates.lat, coordinates.lon)
     const sunset = getSunset(coordinates.lat, coordinates.lon)
     const dayDuration = getDayDuration(sunrise, sunset)
@@ -18,8 +19,8 @@ export const CityListItemView = (city: CityItem) => {
 
     return (
         <List.Item
-            key={geoname_id}
-            icon={{ source: countryList[country_code].flag }}
+            key={geonameId}
+            icon={{ source: countryList[countryCode].flag }}
             title={name}
             subtitle={resolveCoords(coordinates.lat, coordinates.lon)}
             accessories={[
@@ -36,22 +37,25 @@ export const CityListItemView = (city: CityItem) => {
             ]}
             actions={
                 <ActionPanel>
-                    <Action.Push
+                    <Action
                         title="Show More Infos"
                         icon={Icon.Info}
-                        target={
-                            <DetailView
-                                name={name}
-                                country_code={country_code}
-                                timezone={timezone}
-                                coordinates={coordinates}
-                                sunrise={sunriseString}
-                                sunset={sunsetString}
-                                dayDuration={dayDuration}
-                            />
+                        onAction={() =>
+                            push(
+                                <DetailView
+                                    geonameId={geonameId}
+                                    name={name}
+                                    countryCode={countryCode}
+                                    timezone={timezone}
+                                    coordinates={coordinates}
+                                    sunrise={sunriseString}
+                                    sunset={sunsetString}
+                                    dayDuration={dayDuration}
+                                />
+                            )
                         }
                     />
-                    <ActionPanel.Item
+                    <Action
                         title="Add to Favorites"
                         icon={Icon.Star}
                         onAction={async () => await addToFavorites(city)}

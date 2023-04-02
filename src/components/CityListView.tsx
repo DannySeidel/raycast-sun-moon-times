@@ -17,12 +17,13 @@ export const CityListView = () => {
             {searchText.length === 0 ? (
                 <List.Section title="Favorites">
                     {favorites.map((city) => {
-                        const { geoname_id, name, country_code, timezone, coordinates } = city
+                        const { geonameId, name, countryCode, timezone, coordinates } = city
                         return (
                             <CityListItemView
-                                geoname_id={geoname_id}
+                                key={geonameId}
+                                geonameId={geonameId}
                                 name={name}
-                                country_code={country_code}
+                                countryCode={countryCode}
                                 timezone={timezone}
                                 coordinates={coordinates}
                             />
@@ -34,9 +35,10 @@ export const CityListView = () => {
                     const { geoname_id, name, country_code, timezone, coordinates } = city
                     return (
                         <CityListItemView
-                            geoname_id={geoname_id}
+                            key={geoname_id}
+                            geonameId={geoname_id}
                             name={name}
-                            country_code={country_code}
+                            countryCode={country_code}
                             timezone={timezone}
                             coordinates={coordinates}
                         />

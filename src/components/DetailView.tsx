@@ -1,25 +1,28 @@
-import { Detail } from "@raycast/api"
+import { Action, ActionPanel, Detail, Icon, useNavigation } from "@raycast/api"
 import sunCalc from "suncalc"
 import { countryList } from "../../assets/countryList"
 import { CityItem } from "../../types/CityItem"
+import { addToFavorites } from "../common/addToFavorites"
 import { convertDateToString } from "../common/convertDateToString"
 import { resolveCoords } from "../common/resolveCoords"
 
-interface DetailViewProps extends Omit<CityItem, "geoname_id"> {
+interface DetailViewProps extends CityItem {
     sunrise: string
     sunset: string
     dayDuration: string
 }
 
 export const DetailView = ({
+    geonameId,
     name,
-    country_code,
+    countryCode,
     timezone,
     coordinates,
     sunrise,
     sunset,
     dayDuration,
 }: DetailViewProps) => {
+    const { pop } = useNavigation()
     const moreSunInfos = sunCalc.getTimes(new Date(), coordinates.lat, coordinates.lon)
     const solarNoon = convertDateToString(moreSunInfos.solarNoon, timezone)
     const nadir = convertDateToString(moreSunInfos.nadir, timezone)
@@ -31,7 +34,7 @@ export const DetailView = ({
     const moonset = convertDateToString(moonTimes.set, timezone)
     const moonIllumination = sunCalc.getMoonIllumination(new Date())
 
-    const cityInfo = `# ${name}  ${countryList[country_code].flag}\n\n`
+    const cityInfo = `# ${name}  ${countryList[countryCode].flag}\n\n`
     const headings = `### ☀️ Sun \t\t\t\t\t\t\t\t\t\t 🌖  Moon\n`
     const riseTimes = `Sunrise: ${sunrise}  \t\t\t\t\t\t\t\t Moonrise: ${moonrise}\n\n`
     const setTimes = `Sunset: ${sunset} \t\t\t\t\t\t\t\t\t Moonset: ${moonset}\n\n`
@@ -48,11 +51,29 @@ export const DetailView = ({
 
     return (
         <Detail
-            navigationTitle={`${name} ${countryList[country_code].flag}  |  ${resolveCoords(
+            navigationTitle={`${name} ${countryList[countryCode].flag}  |  ${resolveCoords(
                 coordinates.lat,
                 coordinates.lon
             )}`}
             markdown={infoText}
+            actions={
+                <ActionPanel>
+                    <Action title="Go Back" icon={Icon.ArrowCounterClockwise} onAction={() => pop()} />
+                    <Action
+                        title="Add to Favorites"
+                        icon={Icon.Star}
+                        onAction={async () =>
+                            await addToFavorites({
+                                geonameId,
+                                name,
+                                countryCode,
+                                timezone,
+                                coordinates,
+                            })
+                        }
+                    />
+                </ActionPanel>
+            }
         />
     )
 }
