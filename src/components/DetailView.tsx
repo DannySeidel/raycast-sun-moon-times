@@ -1,5 +1,5 @@
 import { Detail } from "@raycast/api"
-import suncalc from "suncalc"
+import sunCalc from "suncalc"
 import { countryList } from "../../assets/countryList"
 import { CityItem } from "../../types/CityItem"
 import { convertDateToString } from "../common/convertDateToString"
@@ -12,20 +12,20 @@ interface DetailViewProps extends Omit<CityItem, "id"> {
 }
 
 export const DetailView = ({ name, country, timezone, lat, lon, sunrise, sunset, dayDuration }: DetailViewProps) => {
-    const moreSunInfos = suncalc.getTimes(new Date(), lat, lon)
+    const moreSunInfos = sunCalc.getTimes(new Date(), lat, lon)
     const solarNoon = convertDateToString(moreSunInfos.solarNoon, timezone)
     const nadir = convertDateToString(moreSunInfos.nadir, timezone)
     const dawn = convertDateToString(moreSunInfos.dawn, timezone)
     const dusk = convertDateToString(moreSunInfos.dusk, timezone)
 
-    const moonTimes = suncalc.getMoonTimes(new Date(), lat, lon)
+    const moonTimes = sunCalc.getMoonTimes(new Date(), lat, lon)
     const moonrise = convertDateToString(moonTimes.rise, timezone)
     const moonset = convertDateToString(moonTimes.set, timezone)
-    const moonIllumination = suncalc.getMoonIllumination(new Date())
+    const moonIllumination = sunCalc.getMoonIllumination(new Date())
 
     const cityInfo = `# ${name}  ${countryList[country].flag}\n\n`
     const headings = `### ☀️ Sun \t\t\t\t\t\t\t\t\t\t 🌖  Moon\n`
-    const riseTimes = `Sunrise: ${sunrise} \t\t\t\t\t\t\t\t Moonrise: ${moonrise}\n\n`
+    const riseTimes = `Sunrise: ${sunrise}  \t\t\t\t\t\t\t\t Moonrise: ${moonrise}\n\n`
     const setTimes = `Sunset: ${sunset} \t\t\t\t\t\t\t\t\t Moonset: ${moonset}\n\n`
     const moreInfo1 = `Dawn: ${dawn} \t\t\t\t\t\t\t\t\t Moon Illumination: ${(moonIllumination.fraction * 100).toFixed(
         1
