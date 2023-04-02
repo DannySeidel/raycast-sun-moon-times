@@ -1,4 +1,4 @@
-import { LocalStorage } from "@raycast/api"
+import { LocalStorage, showToast, Toast } from "@raycast/api"
 import { CityItem } from "../../types/CityItem"
 
 export async function addToFavorites(cityInfo: CityItem) {
@@ -6,7 +6,10 @@ export async function addToFavorites(cityInfo: CityItem) {
     if (savedFavorites) {
         const favorites = JSON.parse(savedFavorites.toString())
         if (favorites.some((favorite: CityItem) => favorite.geonameId === cityInfo.geonameId)) {
-            // TODO: if in favorites show info
+            await showToast({
+                style: Toast.Style.Failure,
+                title: `${cityInfo.name} is already in your favorites`,
+            })
         } else {
             favorites.push(cityInfo)
             await LocalStorage.setItem("favorites", JSON.stringify(favorites))
