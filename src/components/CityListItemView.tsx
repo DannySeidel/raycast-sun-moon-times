@@ -2,12 +2,11 @@ import { Action, ActionPanel, Icon, List, useNavigation } from "@raycast/api"
 import { getSunrise, getSunset } from "sunrise-sunset-js"
 import { countryList } from "../../assets/countryList"
 import { CityItem } from "../../types/CityItem"
-import { addToFavorites } from "../common/addToFavorites"
 import { convertDateToString } from "../common/convertDateToString"
 import { getDayDuration } from "../common/getDayDuration"
-import { removeFromFavorites } from "../common/removeFromFavorites"
 import { resolveCoords } from "../common/resolveCoords"
 import { DetailView } from "./DetailView"
+import { useFavorites } from "./FavoritesProvider"
 
 interface CityListItemViewProps extends CityItem {
     isFavorite?: boolean
@@ -28,6 +27,8 @@ export const CityListItemView = ({
     const dayDuration = getDayDuration(sunrise, sunset)
     const sunriseString = convertDateToString(sunrise, timezone)
     const sunsetString = convertDateToString(sunset, timezone)
+
+    const { addToFavorites, removeFromFavorites } = useFavorites()
 
     return (
         <List.Item

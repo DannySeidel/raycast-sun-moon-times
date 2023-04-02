@@ -2,9 +2,9 @@ import { Action, ActionPanel, Detail, Icon, useNavigation } from "@raycast/api"
 import sunCalc from "suncalc"
 import { countryList } from "../../assets/countryList"
 import { CityItem } from "../../types/CityItem"
-import { addToFavorites } from "../common/addToFavorites"
 import { convertDateToString } from "../common/convertDateToString"
 import { resolveCoords } from "../common/resolveCoords"
+import { useFavorites } from "./FavoritesProvider"
 
 interface DetailViewProps extends CityItem {
     sunrise: string
@@ -48,6 +48,8 @@ export const DetailView = ({
     const otherInfo2 = `Solar Noon: ${solarNoon}, Nadir: ${nadir}`
 
     const infoText = `${cityInfo} ${headings} ${riseTimes} ${setTimes} ${moreInfo1} ${moreInfo2} ${otherHeadings} ${otherInfo1} ${otherInfo2}`
+
+    const { addToFavorites } = useFavorites()
 
     return (
         <Detail

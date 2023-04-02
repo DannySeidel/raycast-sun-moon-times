@@ -3,14 +3,14 @@ import { useFetch } from "@raycast/utils"
 import { useState } from "react"
 import { ressourceUrl } from "../../assets/ressourceUrl"
 import { ResponseData } from "../../types/ResponseData"
-import { useFavorites } from "../common/useFavorites"
 import { CityListItemView } from "./CityListItemView"
+import { useFavorites } from "./FavoritesProvider"
 
 export const CityListView = () => {
     const [searchText, setSearchText] = useState<string>("")
     const { isLoading, data } = useFetch<ResponseData>(ressourceUrl(searchText))
 
-    const favorites = useFavorites()
+    const { favorites } = useFavorites()
 
     return (
         <List isLoading={isLoading} onSearchTextChange={setSearchText}>
