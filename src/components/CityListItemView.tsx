@@ -5,12 +5,24 @@ import { CityItem } from "../../types/CityItem"
 import { addToFavorites } from "../common/addToFavorites"
 import { convertDateToString } from "../common/convertDateToString"
 import { getDayDuration } from "../common/getDayDuration"
+import { removeFromFavorites } from "../common/removeFromFavorites"
 import { resolveCoords } from "../common/resolveCoords"
 import { DetailView } from "./DetailView"
 
-export const CityListItemView = (city: CityItem) => {
+interface CityListItemViewProps extends CityItem {
+    isFavorite?: boolean
+}
+
+export const CityListItemView = ({
+    geonameId,
+    name,
+    countryCode,
+    timezone,
+    coordinates,
+    isFavorite,
+}: CityListItemViewProps) => {
     const { push } = useNavigation()
-    const { geonameId, name, countryCode, timezone, coordinates } = city
+    const city = { geonameId, name, countryCode, timezone, coordinates }
     const sunrise = getSunrise(coordinates.lat, coordinates.lon)
     const sunset = getSunset(coordinates.lat, coordinates.lon)
     const dayDuration = getDayDuration(sunrise, sunset)
@@ -55,11 +67,20 @@ export const CityListItemView = (city: CityItem) => {
                             )
                         }
                     />
-                    <Action
-                        title="Add to Favorites"
-                        icon={Icon.Star}
-                        onAction={async () => await addToFavorites(city)}
-                    />
+                    {isFavorite ? (
+                        <Action
+                            title="Remove From Favorites"
+                            style={Action.Style.Destructive}
+                            icon={Icon.Trash}
+                            onAction={async () => await removeFromFavorites(geonameId)}
+                        />
+                    ) : (
+                        <Action
+                            title="Add to Favorites"
+                            icon={Icon.Star}
+                            onAction={async () => await addToFavorites(city)}
+                        />
+                    )}
                 </ActionPanel>
             }
         />

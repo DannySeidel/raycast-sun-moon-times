@@ -26,6 +26,7 @@ export const CityListView = () => {
                                 countryCode={countryCode}
                                 timezone={timezone}
                                 coordinates={coordinates}
+                                isFavorite
                             />
                         )
                     })}
