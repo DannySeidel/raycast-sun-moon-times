@@ -4,16 +4,14 @@ import { countryList } from "../../assets/countryList"
 import { CityItem } from "../../types/CityItem"
 import { convertDateToString } from "../common/convertDateToString"
 import { resolveCoords } from "../common/resolveCoords"
-import { useFavorites } from "./FavoritesProvider"
 
-interface DetailViewProps extends CityItem {
+interface DetailViewProps extends Omit<CityItem, "geonameId"> {
     sunrise: string
     sunset: string
     dayDuration: string
 }
 
 export const DetailView = ({
-    geonameId,
     name,
     countryCode,
     timezone,
@@ -30,8 +28,8 @@ export const DetailView = ({
     const dusk = convertDateToString(moreSunInfos.dusk, timezone)
 
     const moonTimes = sunCalc.getMoonTimes(new Date(), coordinates.lat, coordinates.lon)
-    const moonrise = convertDateToString(moonTimes.rise, timezone)
-    const moonset = convertDateToString(moonTimes.set, timezone)
+    const moonrise = !moonTimes.rise ? "Moon doesn't rise today" : convertDateToString(moonTimes.rise, timezone)
+    const moonset = !moonTimes.set ? "Moon doesn't set today" : convertDateToString(moonTimes.set, timezone)
     const moonIllumination = sunCalc.getMoonIllumination(new Date())
 
     const cityInfo = `# ${name}  ${countryList[countryCode].flag}\n\n`
@@ -49,8 +47,6 @@ export const DetailView = ({
 
     const infoText = `${cityInfo} ${headings} ${riseTimes} ${setTimes} ${moreInfo1} ${moreInfo2} ${otherHeadings} ${otherInfo1} ${otherInfo2}`
 
-    const { addToFavorites } = useFavorites()
-
     return (
         <Detail
             navigationTitle={`${name} ${countryList[countryCode].flag}  |  ${resolveCoords(
@@ -61,13 +57,6 @@ export const DetailView = ({
             actions={
                 <ActionPanel>
                     <Action title="Go Back" icon={Icon.ArrowCounterClockwise} onAction={() => pop()} />
-                    <Action
-                        title="Add to Favorites"
-                        icon={Icon.Star}
-                        onAction={async () => {
-                            await addToFavorites({ geonameId, name, countryCode, timezone, coordinates })
-                        }}
-                    />
                 </ActionPanel>
             }
         />

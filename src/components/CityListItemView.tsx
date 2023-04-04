@@ -28,7 +28,7 @@ export const CityListItemView = ({
     const sunriseString = convertDateToString(sunrise, timezone)
     const sunsetString = convertDateToString(sunset, timezone)
 
-    const { addToFavorites, removeFromFavorites } = useFavorites()
+    const { addToFavorites, removeFromFavorites, moveFavorite } = useFavorites()
 
     return (
         <List.Item
@@ -56,7 +56,6 @@ export const CityListItemView = ({
                         onAction={() =>
                             push(
                                 <DetailView
-                                    geonameId={geonameId}
                                     name={name}
                                     countryCode={countryCode}
                                     timezone={timezone}
@@ -69,12 +68,26 @@ export const CityListItemView = ({
                         }
                     />
                     {isFavorite ? (
-                        <Action
-                            title="Remove From Favorites"
-                            style={Action.Style.Destructive}
-                            icon={Icon.Trash}
-                            onAction={async () => await removeFromFavorites(city)}
-                        />
+                        <>
+                            <Action
+                                title="Remove From Favorites"
+                                style={Action.Style.Destructive}
+                                icon={Icon.Trash}
+                                onAction={async () => await removeFromFavorites(city)}
+                            />
+                            <Action
+                                title="Move Favorite Up"
+                                icon={Icon.ArrowUp}
+                                shortcut={{ modifiers: ["cmd", "opt"], key: "arrowUp" }}
+                                onAction={async () => await moveFavorite(city, "up")}
+                            />
+                            <Action
+                                title="Move Favorite Down"
+                                icon={Icon.ArrowDown}
+                                shortcut={{ modifiers: ["cmd", "opt"], key: "arrowDown" }}
+                                onAction={async () => await moveFavorite(city, "down")}
+                            />
+                        </>
                     ) : (
                         <Action
                             title="Add to Favorites"

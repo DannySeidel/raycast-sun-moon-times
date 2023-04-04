@@ -7,6 +7,7 @@ interface FavoritesContextProps {
     favorites: CityItem[]
     addToFavorites: (cityInfo: CityItem) => Promise<void>
     removeFromFavorites: (cityInfo: CityItem) => Promise<void>
+    moveFavorite: (cityInfo: CityItem, direction: "up" | "down") => Promise<void>
 }
 
 interface FavoritesProviderProps {
@@ -17,6 +18,7 @@ const initialFavoritesContext: FavoritesContextProps = {
     favorites: [],
     addToFavorites: () => new Promise(() => Promise<object>),
     removeFromFavorites: () => new Promise(() => Promise<object>),
+    moveFavorite: () => new Promise(() => Promise<object>),
 }
 
 const FavoritesContext = createContext<FavoritesContextProps>(initialFavoritesContext)
@@ -35,6 +37,21 @@ export const FavoritesProvider = ({ children }: FavoritesProviderProps) => {
         getFavorites()
     }, [])
 
+    useEffect(() => {
+        async function setFavorites() {
+            if (favorites) {
+                if (favorites.length === 0) {
+                    await LocalStorage.removeItem("favorites")
+                } else {
+                    console.log("set")
+                    await LocalStorage.setItem("favorites", JSON.stringify(favorites))
+                }
+            }
+        }
+
+        setFavorites()
+    }, [favorites])
+
     async function addToFavorites(cityInfo: CityItem): Promise<void> {
         if (favorites.some((favorite: CityItem) => favorite.geonameId === cityInfo.geonameId)) {
             await showToast({
@@ -44,7 +61,6 @@ export const FavoritesProvider = ({ children }: FavoritesProviderProps) => {
         } else {
             const newFavorites = [...favorites, cityInfo]
             setFavorites(newFavorites)
-            await LocalStorage.setItem("favorites", JSON.stringify(newFavorites))
             await showToast({
                 style: Toast.Style.Success,
                 title: `${countryList[cityInfo.countryCode].flag} ${cityInfo.name} was add to your favorites`,
@@ -56,7 +72,6 @@ export const FavoritesProvider = ({ children }: FavoritesProviderProps) => {
         if (favorites.some((favorite: CityItem) => favorite.geonameId === cityInfo.geonameId)) {
             const newFavorites = favorites.filter((favorite: CityItem) => favorite.geonameId !== cityInfo.geonameId)
             setFavorites(newFavorites)
-            await LocalStorage.setItem("favorites", JSON.stringify(newFavorites))
             await showToast({
                 style: Toast.Style.Success,
                 title: `${countryList[cityInfo.countryCode].flag} ${cityInfo.name} was removed from your favorites`,
@@ -64,8 +79,45 @@ export const FavoritesProvider = ({ children }: FavoritesProviderProps) => {
         }
     }
 
+    async function moveFavorite(cityInfo: CityItem, direction: "up" | "down"): Promise<void> {
+        const newFavorites = [...favorites]
+        const index = newFavorites.findIndex((favorite) => favorite.geonameId === cityInfo.geonameId)
+
+        if (direction === "up") {
+            if (index === 0) {
+                await showToast({
+                    style: Toast.Style.Failure,
+                    title: `${countryList[cityInfo.countryCode].flag} ${
+                        cityInfo.name
+                    } is already at the top of your favorites`,
+                })
+            } else {
+                const temp = newFavorites[index - 1]
+                newFavorites[index - 1] = newFavorites[index]
+                newFavorites[index] = temp
+            }
+        }
+
+        if (direction === "down") {
+            if (index === newFavorites.length - 1) {
+                await showToast({
+                    style: Toast.Style.Failure,
+                    title: `${countryList[cityInfo.countryCode].flag} ${
+                        cityInfo.name
+                    } is already at the bottom of your favorites`,
+                })
+            } else {
+                const temp = newFavorites[index + 1]
+                newFavorites[index + 1] = newFavorites[index]
+                newFavorites[index] = temp
+            }
+        }
+
+        setFavorites(newFavorites)
+    }
+
     return (
-        <FavoritesContext.Provider value={{ favorites, addToFavorites, removeFromFavorites }}>
+        <FavoritesContext.Provider value={{ favorites, addToFavorites, removeFromFavorites, moveFavorite }}>
             {children}
         </FavoritesContext.Provider>
     )
