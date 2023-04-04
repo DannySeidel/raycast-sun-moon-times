@@ -43,7 +43,6 @@ export const FavoritesProvider = ({ children }: FavoritesProviderProps) => {
                 if (favorites.length === 0) {
                     await LocalStorage.removeItem("favorites")
                 } else {
-                    console.log("set")
                     await LocalStorage.setItem("favorites", JSON.stringify(favorites))
                 }
             }
