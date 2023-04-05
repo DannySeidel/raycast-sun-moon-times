@@ -2,7 +2,7 @@
     "$schema": "https://www.raycast.com/schemas/extension.json",
     "name": "sun-moon-times",
     "title": "Sun/Moon Times",
-    "description": "Show info for sun and moon for any city in the World.",
+    "description": "Show times for sun and moon for any city in the World.",
     "icon": "extension_icon@512px.png",
     "author": "danny_seidel",
     "categories": [
@@ -26,7 +26,7 @@
         {
             "name": "index",
             "title": "Show Sun/Moon Times",
-            "description": "Show Sun/Moon times",
+            "description": "Search for a city and show the sun and moon times for today.",
             "mode": "view"
         }
     ],
