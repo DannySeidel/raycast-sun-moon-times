@@ -51,7 +51,7 @@ export const CityListItemView = ({
             actions={
                 <ActionPanel>
                     <Action
-                        title="Show More Infos"
+                        title="Show More Info"
                         icon={Icon.Info}
                         onAction={() =>
                             push(
