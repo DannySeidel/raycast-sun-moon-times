@@ -6,11 +6,7 @@ Show info for sun and moon for any city in the World.
 
 ### Search
 ![Search](./assets/sun-moon-times-1.png)
-- Search for a city and display the sun times and day duration for it
-
-### Detail Info
-![Detail Info](./assets/sun-moon-times-3.png)
-- Show detailed info for the sun and moon
+- Search for a city and display detailed info for the sun and moon
 
 ### Favorites
 ![Favorites](./assets/sun-moon-times-2.png)
