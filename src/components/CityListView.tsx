@@ -3,6 +3,7 @@ import { useFetch } from "@raycast/utils"
 import { useState } from "react"
 import { ResponseData } from "../../types/ResponseData"
 import { ressourceUrl } from "../ressources/ressourceUrl"
+import { CityListDropdownView } from "./CityListDropdownView"
 import { CityListItemView } from "./CityListItemView"
 import { useFavorites } from "./FavoritesProvider"
 
@@ -13,7 +14,14 @@ export const CityListView = () => {
     const { favorites } = useFavorites()
 
     return (
-        <List isLoading={isLoading} onSearchTextChange={setSearchText} isShowingDetail throttle>
+        <List
+            isLoading={isLoading}
+            onSearchTextChange={setSearchText}
+            searchBarPlaceholder="Search a city..."
+            searchBarAccessory={<CityListDropdownView />}
+            isShowingDetail
+            throttle
+        >
             {searchText.length === 0 ? (
                 <List.Section title="Favorites">
                     {favorites.map((city) => {

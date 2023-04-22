@@ -55,7 +55,7 @@ export const CityListItemView = ({
                                 onAction={async () => {
                                     if (
                                         await confirmAlert({
-                                            title: "Remove From Favorites?",
+                                            title: "Remove from favorites?",
                                             message: `${countryList[countryCode].flag} ${name}`,
                                             primaryAction: { title: "Remove", style: Alert.ActionStyle.Destructive },
                                         })
