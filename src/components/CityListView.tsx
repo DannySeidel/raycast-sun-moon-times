@@ -9,6 +9,9 @@ import { useFavorites } from "./FavoritesProvider"
 
 export const CityListView = () => {
     const [searchText, setSearchText] = useState<string>("")
+    const [currentDate, setCurrentDate] = useState<Date>(
+        new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
+    )
     const { isLoading, data } = useFetch<ResponseData>(ressourceUrl(searchText))
 
     const { favorites } = useFavorites()
@@ -18,7 +21,7 @@ export const CityListView = () => {
             isLoading={isLoading}
             onSearchTextChange={setSearchText}
             searchBarPlaceholder="Search a city..."
-            searchBarAccessory={<CityListDropdownView />}
+            searchBarAccessory={<CityListDropdownView setCurrentDate={setCurrentDate} />}
             isShowingDetail
             throttle
         >
@@ -34,6 +37,7 @@ export const CityListView = () => {
                                 countryCode={countryCode}
                                 timezone={timezone}
                                 coordinates={coordinates}
+                                currentDate={currentDate}
                                 isFavorite
                             />
                         )
@@ -49,6 +53,7 @@ export const CityListView = () => {
                             name={name}
                             countryCode={country_code}
                             timezone={timezone}
+                            currentDate={currentDate}
                             coordinates={coordinates}
                         />
                     )
