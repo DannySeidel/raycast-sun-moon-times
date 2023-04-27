@@ -1,9 +1,14 @@
 # Sun/Moon Times Changelog
 
+## [v1.2.1] - 2023-04-27
+
+- Fix bug where the calculated times were off by one day
+- Small fixes and improvements
+
 ## [v1.2.0] - 2023-04-22
 
 - Add date picker to select a date other than today
-- same minor improvements
+- Some minor improvements
 
 ## [v1.1.0] - 2023-04-14
 
