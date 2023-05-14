@@ -14,4 +14,4 @@ Show info for sun and moon for any city in the World.
 - Add and remove cities from your favorites list
 - Change the order of the cities in your favorites list
 
-
+![Actions](assets/sun-moon-times-3.png)
